@@ -48,10 +48,20 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(), time, Toast.LENGTH_SHORT).show();
                     String data = time;
                     shareDataInterface.sendData(data, hour, minutes);
+
+                }
+            });
+        }
+        if (this.layoutStyle == R.layout.modal_bs_one){
+            view.findViewById(R.id.buttonClose).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
                 }
             });
         }
         dialog.setContentView(view);
+
     }
     //функция для передачи текста с одного классса в другой
     public interface ShareDataInterface {
