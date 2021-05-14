@@ -110,8 +110,12 @@ public class MyListAdapter extends ArrayAdapter<String> {
 
         Calendar calendar = Calendar.getInstance();
         Intent my_intent = new Intent(getContext(), AlarmReceiver.class);
+
+        String timeString = h + ":" + m;
+        my_intent.putExtra("message", timeString);
         calendar.set(Calendar.HOUR_OF_DAY, h);
         calendar.set(Calendar.MINUTE, m);
+        calendar.set(Calendar.SECOND, 0);
 
         pendingIntent = PendingIntent.getBroadcast(getContext(), 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

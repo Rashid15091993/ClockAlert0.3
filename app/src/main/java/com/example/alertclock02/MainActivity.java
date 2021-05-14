@@ -44,22 +44,16 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     private SwipeMenuListView list;
     private List timeList = new ArrayList();
     private EditText textView;
-    private NotificationManager notificationManager;
-    private static final int NOTIFY_ID = 101;
 
     DBHelper dbHelper;
     TimePicker timePicker;
     MyListAdapter adapter;
-
-    // Идентификатор канала
-    private static String CHANNEL_ID = "TimeClock";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         //DataBase
         dbHelper = new DBHelper(this);
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
             }
         });
     }
-    //функция для старта всех виджетов во время включения приложения
+    //функция для старта всех установленных будильников во время включения приложения
     @Override
     protected void onStart() {
 
@@ -93,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         timeList.add(data);
         list = (SwipeMenuListView) findViewById(R.id.listView1);
         list.setAdapter(adapter);
-        onManager();
 
         list.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -113,25 +106,6 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
     }
 
-    private void onManager() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle("Напоминание")
-                        .setContentText("Пора покормить кота")
-                        .setPriority(NotificationCompat.PRIORITY_HIGH);
-        
-        createChannellfNeeded(notificationManager);
-        notificationManager.notify(NOTIFY_ID, builder.build());
-
-    }
-
-    public static void createChannellfNeeded(NotificationManager manager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT);
-            manager.createNotificationChannel(notificationChannel);
-        }
-    }
 
     //Запись в Базу данных
     private void writeDataBase(String time, int hour, int min){
