@@ -19,7 +19,7 @@ import androidx.core.app.NotificationCompat;
 
 //Класс отвечающий за включение мелодии когда приходит время
 public class AlarmReceiver extends BroadcastReceiver {
-    MediaPlayer mPlayer;
+    
     private static final int NOTIFY_ID = 101;
     private static String CHANNEL_ID = "TimeClock";
 

@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "time12db";
+    public static final String DATABASE_NAME = "timedb2";
     public static final String TABLE_CONTACTS = "timeDb";
 
     public static final String KEY_ID = "_id";

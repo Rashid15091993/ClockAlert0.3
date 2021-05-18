@@ -91,10 +91,11 @@ public class MyListAdapter extends ArrayAdapter<String> {
         Cursor cursor = database.query(DBHelper.TABLE_CONTACTS, null,null,null,null,null,null);
 
         if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
             int hourIndex = cursor.getColumnIndex(DBHelper.KEY_HOUR);
             int minIndex = cursor.getColumnIndex(DBHelper.KEY_MIN);
             do {
-                setTimeClock(cursor.getInt(hourIndex), cursor.getInt(minIndex));
+                setTimeClock(cursor.getInt(idIndex), cursor.getInt(hourIndex), cursor.getInt(minIndex));
 
             } while (cursor.moveToNext());
 
@@ -106,18 +107,18 @@ public class MyListAdapter extends ArrayAdapter<String> {
     }
 
     //Активируйться будильник по нужному времение
-    public void setTimeClock(int h, int m) {
+    public void setTimeClock(int _id,int h, int m) {
 
         Calendar calendar = Calendar.getInstance();
         Intent my_intent = new Intent(getContext(), AlarmReceiver.class);
 
-        String timeString = h + ":" + m;
+        String timeString = h + ":" + m + "|" + _id;
         my_intent.putExtra("message", timeString);
         calendar.set(Calendar.HOUR_OF_DAY, h);
         calendar.set(Calendar.MINUTE, m);
         calendar.set(Calendar.SECOND, 0);
 
-        pendingIntent = PendingIntent.getBroadcast(getContext(), 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingIntent = PendingIntent.getBroadcast(getContext(), _id, my_intent, PendingIntent.FLAG_ONE_SHOT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }
