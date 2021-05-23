@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         timeDBManager = new TimeDBManager(this);
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
+        list = (SwipeMenuListView) findViewById(R.id.listView1);
+
 
 
         findViewById(R.id.toolbar1).setOnClickListener(new View.OnClickListener() {
@@ -56,12 +58,10 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     protected void onResume() {
         super.onResume();
         timeDBManager.openDb();
-
         //Adapter
         adapter = new MyListAdapter(this, R.layout.time_item, timeDBManager.readDb());
-
-        list = (SwipeMenuListView) findViewById(R.id.listView1);
         list.setAdapter(adapter);
+
         //Метод свайпа для удаления
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -98,7 +98,10 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                         // delete
                         adapter.remove(list.getItemAtPosition(position).toString());
                         adapter.notifyDataSetChanged();
-//                        database.delete(DBHelper.TABLE_CONTACTS, DBHelper.KEY_ID + "- " + adapter.getItemId(position), null);
+
+                        timeDBManager.deleteWidgetDb(timeDBManager.readDb().get(position));
+                        Log.d("...", "position = " + timeDBManager.readDb().get(position));
+
                         break;
                 }
                 return false;
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         timeDBManager.insertDb(data, hour, min);
 
         adapter = new MyListAdapter(this, R.layout.time_item, timeDBManager.readDb());
-        list = (SwipeMenuListView) findViewById(R.id.listView1);
+
         list.setAdapter(adapter);
         //Метод свайпа для удаления
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -149,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                         // delete
                         adapter.remove(list.getItemAtPosition(position).toString());
                         adapter.notifyDataSetChanged();
-                        Log.d("...", "position = " + adapter.getItemId(position));
-//                        database.delete(DBHelper.TABLE_CONTACTS, DBHelper.KEY_ID + "- " + adapter.getItemId(position), null);
+                        timeDBManager.deleteWidgetDb(timeDBManager.readDb().get(position));
+                        
                         break;
                 }
                 return false;
@@ -163,19 +166,5 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         super.onDestroy();
         timeDBManager.closeDb();
     }
-
-//    private void deleteStringDataBase(long widgetText) {
-//
-//        SQLiteDatabase databaseDel = dbHelper.getWritableDatabase();
-//        String str = String.valueOf(widgetText);
-//        if (str.equalsIgnoreCase("")){
-//            return;
-//        }
-//        int numId = (int) widgetText;
-//        int count = databaseDel.delete(DBHelper.TABLE_CONTACTS, DBHelper.KEY_ID + "- " + numId, null);
-//
-//        Log.d("mLog",String.valueOf(count));
-//
-//    }
 
 }

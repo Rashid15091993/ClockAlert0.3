@@ -18,10 +18,12 @@ public class TimeDBManager {
         dbHelper = new DBHelper(context);
 
     }
+    //Открытие базы
     public void openDb() {
         db = dbHelper.getWritableDatabase();
 
     }
+    //запись в базу
     public void insertDb(String time, int hour, int min) {
 
         ContentValues contentValues = new ContentValues();
@@ -30,7 +32,7 @@ public class TimeDBManager {
         contentValues.put(DBHelper.KEY_MIN, min);
         db.insert(DBHelper.TABLE_CONTACTS, null, contentValues);
     }
-
+//чтение базы
     public List<String> readDb() {
         List<String> timeList  = new ArrayList<>();
         Cursor cursor = db.query(DBHelper.TABLE_CONTACTS, null, null, null,
@@ -43,7 +45,16 @@ public class TimeDBManager {
         cursor.close();
         return timeList;
     }
+//удаление записи
+    public void deleteWidgetDb(String time) {
+        db.delete(dbHelper.TABLE_CONTACTS, dbHelper.KEY_TIME + "= ? ", new String[]{time});
+
+    }
+//закрытие базы
     public void closeDb() {
+
         dbHelper.close();
     }
+
+
 }
