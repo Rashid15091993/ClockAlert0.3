@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.alertclock02.AlarmReceiver;
-import com.example.alertclock02.DBHelper;
-import com.example.alertclock02.MainActivity;
+import com.example.alertclock02.dataBase.DBHelper;
 import com.example.alertclock02.R;
 
 import java.util.Calendar;

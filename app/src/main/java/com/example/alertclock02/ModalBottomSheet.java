@@ -45,7 +45,6 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
                     int hour = timePicker.getCurrentHour();
                     int minutes = timePicker.getCurrentMinute();
                     String time = hour + ":" + minutes;
-                    Toast.makeText(getContext(), time, Toast.LENGTH_SHORT).show();
                     String data = time;
                     shareDataInterface.sendData(data, hour, minutes);
 
