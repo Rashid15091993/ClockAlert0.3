@@ -16,16 +16,20 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.alertclock02.dataBase.TimeDBManager;
-import com.example.alertclock02.mylistadapter.MyListAdapter;
+import com.example.alertclock02.mylistadapter.MyAdapter;
+import com.example.alertclock02.timeModel.TimeID;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ModalBottomSheet.ShareDataInterface{
     private SwipeMenuListView list;
     private EditText textView;
     private TimeDBManager timeDBManager;
 
+    ArrayList<TimeID> arrayList;
     TimePicker timePicker;
-    MyListAdapter adapter;
+    MyAdapter adapter;
     SQLiteDatabase database;
 
     @Override
@@ -37,8 +41,6 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         list = (SwipeMenuListView) findViewById(R.id.listView1);
-
-
 
         findViewById(R.id.toolbar1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         super.onResume();
         timeDBManager.openDb();
         //Adapter
-        adapter = new MyListAdapter(this, R.layout.time_item, timeDBManager.readDb());
+        arrayList = (ArrayList<TimeID>) timeDBManager.readDb();
+        adapter = new MyAdapter(this, arrayList);
         list.setAdapter(adapter);
 
         //Метод свайпа для удаления
@@ -92,29 +95,32 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
-                switch (index) {
+                switch (menu.getViewType()) {
 
                     case 0:
                         // delete
-                        adapter.remove(list.getItemAtPosition(position).toString());
+//                        adapter.remove(list.getItemAtPosition(position).toString());
                         adapter.notifyDataSetChanged();
 
-                        timeDBManager.deleteWidgetDb(timeDBManager.readDb().get(position));
-                        Log.d("...", "position = " + timeDBManager.readDb().get(position));
+                        TimeID timeID = arrayList.get(position);
+                        String idStr = String.valueOf(timeID.getId());
+                        timeDBManager.deleteWidgetDb(idStr);
+                        Log.d("...", "id" + idStr);
 
                         break;
                 }
                 return false;
             }
         });
+
     }
     //Выбираем время и записываем в базу данных и воводим в приложение
     @Override
     public void sendData(String data, int hour, int min) {
         //Запись в Базу данных
         timeDBManager.insertDb(data, hour, min);
-
-        adapter = new MyListAdapter(this, R.layout.time_item, timeDBManager.readDb());
+        arrayList = (ArrayList<TimeID>) timeDBManager.readDb();
+        adapter = new MyAdapter(this,arrayList);
 
         list.setAdapter(adapter);
         //Метод свайпа для удаления
@@ -150,10 +156,11 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
                     case 0:
                         // delete
-                        adapter.remove(list.getItemAtPosition(position).toString());
+//                        adapter.remove(list.getItemAtPosition(position).toString());
                         adapter.notifyDataSetChanged();
-                        timeDBManager.deleteWidgetDb(timeDBManager.readDb().get(position));
-                        
+                        TimeID timeID = arrayList.get(position);
+                        String idStr = String.valueOf(timeID.getId());
+                        timeDBManager.deleteWidgetDb(idStr);
                         break;
                 }
                 return false;
