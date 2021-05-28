@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         findViewById(R.id.toolbar1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 setDialog(R.layout.modal_bs_one);
             }
         });
@@ -95,14 +96,15 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
-                switch (menu.getViewType()) {
+                switch (index) {
 
                     case 0:
-                        // delete
-//                        adapter.remove(list.getItemAtPosition(position).toString());
-                        adapter.notifyDataSetChanged();
-
+                        // Удаление будильника при выдвиге и нажатие на свайпа
                         TimeID timeID = arrayList.get(position);
+                        arrayList.remove(arrayList.get(position));
+                        adapter.notifyDataSetChanged();
+                        list.setAdapter(adapter);
+
                         String idStr = String.valueOf(timeID.getId());
                         timeDBManager.deleteWidgetDb(idStr);
                         Log.d("...", "id" + idStr);
@@ -155,10 +157,13 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                 switch (index) {
 
                     case 0:
-                        // delete
-//                        adapter.remove(list.getItemAtPosition(position).toString());
-                        adapter.notifyDataSetChanged();
+                        // Удаление будильника при выдвиге и нажатие на свайпа
                         TimeID timeID = arrayList.get(position);
+                        
+                        arrayList.remove(arrayList.get(position));
+                        adapter.notifyDataSetChanged();
+                        list.setAdapter(adapter);
+
                         String idStr = String.valueOf(timeID.getId());
                         timeDBManager.deleteWidgetDb(idStr);
                         break;
