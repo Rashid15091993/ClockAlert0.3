@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
                         String idStr = String.valueOf(timeID.getId());
                         timeDBManager.deleteWidgetDb(idStr);
-                        Log.d("...", "id" + idStr);
+
+
 
                         break;
                 }

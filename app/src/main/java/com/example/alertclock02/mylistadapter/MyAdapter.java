@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class MyAdapter extends BaseAdapter {
     public MyAdapter(Context context, ArrayList<TimeID> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
     @Override
@@ -55,7 +57,12 @@ public class MyAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-
+                        int id = timeID.getId();
+                        int hour = timeID.getHour();
+                        int minute = timeID.getMinute();
+                        setTimeClock(id, hour, minute);
+                        
+                        Log.d("...", "id" + hour);
                         Toast.makeText(context, "ON", Toast.LENGTH_SHORT).show();
                     }
                     else {

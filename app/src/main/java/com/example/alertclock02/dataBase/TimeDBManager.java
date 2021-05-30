@@ -42,26 +42,16 @@ public class TimeDBManager {
 
         while(cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID));
+            int hour = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_HOUR));
+            int minute = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_MIN));
+
             String timeText = cursor.getString(cursor.getColumnIndex(DBHelper.KEY_TIME));
-            TimeID timeID = new TimeID(id, timeText);
+            TimeID timeID = new TimeID(id, hour, minute,timeText);
 
             timeList.add(timeID);
         }
         cursor.close();
         return timeList;
-    }
-    //чтение базы
-    public List<String> readDbId() {
-        List<String> idList  = new ArrayList<>();
-        Cursor cursor = db.query(DBHelper.TABLE_CONTACTS, null, null, null,
-                null,null, null);
-
-        while(cursor.moveToNext()) {
-            String idText = cursor.getString(cursor.getColumnIndex(DBHelper.KEY_ID));
-            idList.add(idText);
-        }
-        cursor.close();
-        return idList;
     }
 
 //удаление записи
