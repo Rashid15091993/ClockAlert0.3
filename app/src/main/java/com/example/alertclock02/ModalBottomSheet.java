@@ -44,9 +44,15 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
 
                     int hour = timePicker.getCurrentHour();
                     int minutes = timePicker.getCurrentMinute();
-                    String time = hour + ":" + minutes;
-                    String data = time;
-                    shareDataInterface.sendData(data, hour, minutes);
+                    //Проверка если меньше 10 минут то добавляем 0 спереди
+                    String time;
+                    if (minutes < 10) {
+                        time = hour + ":" + "0" + minutes;
+                    }
+                    else {
+                        time = hour + ":" + minutes;
+                    }
+                    shareDataInterface.sendData(time, hour, minutes);
 
                 }
             });

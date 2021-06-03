@@ -26,6 +26,7 @@ public class MyAdapter extends BaseAdapter {
     ArrayList<TimeID> arrayList;
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
+    Intent my_intent;
 
     public MyAdapter(Context context, ArrayList<TimeID> arrayList) {
         this.context = context;
@@ -56,8 +57,9 @@ public class MyAdapter extends BaseAdapter {
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int id = timeID.getId();
                     if (isChecked) {
-                        int id = timeID.getId();
+
                         int hour = timeID.getHour();
                         int minute = timeID.getMinute();
                         setTimeClock(id, hour, minute);
@@ -66,6 +68,7 @@ public class MyAdapter extends BaseAdapter {
                         Toast.makeText(context, "ON", Toast.LENGTH_SHORT).show();
                     }
                     else {
+                        cancelTimeClock();
                         Toast.makeText(context, "OFF", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -83,16 +86,24 @@ public class MyAdapter extends BaseAdapter {
     public void setTimeClock(int _id,int h, int m) {
 
         Calendar calendar = Calendar.getInstance();
-        Intent my_intent = new Intent(context, AlarmReceiver.class);
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        my_intent = new Intent(context, AlarmReceiver.class);
 
         String timeString = h + ":" + m + "|" + _id;
         my_intent.putExtra("message", timeString);
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, h);
         calendar.set(Calendar.MINUTE, m);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(calendar.SECOND, 0);
+        calendar.set(calendar.MILLISECOND, 0);
 
         pendingIntent = PendingIntent.getBroadcast(context, _id, my_intent, PendingIntent.FLAG_ONE_SHOT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+    //Отмена будильника
+    public void cancelTimeClock() {
+
+        alarmManager.cancel(pendingIntent);
     }
 
 }
