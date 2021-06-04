@@ -1,5 +1,5 @@
 # ClockAllert0.3
+![Screenshot_1622823108](https://user-images.githubusercontent.com/59281938/120832157-c57dc200-c579-11eb-8871-b08f5ce3806d.png)
+![Screenshot_1622823113](https://user-images.githubusercontent.com/59281938/120832168-c878b280-c579-11eb-88b7-94401392c2e6.png)
+![Screenshot_1622823117](https://user-images.githubusercontent.com/59281938/120832173-c9a9df80-c579-11eb-8389-c13f08fd36b9.png)
 
-![Screenshot_1620764376](https://user-images.githubusercontent.com/59281938/117879566-9187e780-b2c0-11eb-977a-69506f3326f3.png)
-![Screenshot_1620764386](https://user-images.githubusercontent.com/59281938/117879571-9351ab00-b2c0-11eb-80ca-8e36cabe9249.png)
-![Screenshot_1620764393](https://user-images.githubusercontent.com/59281938/117879574-9482d800-b2c0-11eb-8a9b-ba7466e13a7a.png)
