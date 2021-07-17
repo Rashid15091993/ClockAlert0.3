@@ -15,11 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alertclock02.AlarmReceiver;
+import com.example.alertclock02.MainActivity;
 import com.example.alertclock02.R;
 import com.example.alertclock02.timeModel.TimeID;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MyAdapter extends BaseAdapter {
     Context context;
@@ -27,6 +30,8 @@ public class MyAdapter extends BaseAdapter {
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
     Intent my_intent;
+
+
 
     public MyAdapter(Context context, ArrayList<TimeID> arrayList) {
         this.context = context;
@@ -51,24 +56,25 @@ public class MyAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.time_item, null);
             TextView title = (TextView) convertView.findViewById(R.id.text_item);
             Switch aSwitch = (Switch) convertView.findViewById(R.id.switch1);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
             TimeID timeID = arrayList.get(position);
             title.setText(timeID.getName());
+
         //Перетаскивание свифт кнопки
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int id = timeID.getId();
                     if (isChecked) {
 
                         int hour = timeID.getHour();
                         int minute = timeID.getMinute();
-                        setTimeClock(id, hour, minute);
-                        
+                        setTimeClock(hour, minute);
+
                         Log.d("...", "id" + hour);
                         Toast.makeText(context, "ON", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        cancelTimeClock();
+
                         Toast.makeText(context, "OFF", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -83,27 +89,38 @@ public class MyAdapter extends BaseAdapter {
     }
 
     //Активируйться будильник по нужному времение
-    public void setTimeClock(int _id,int h, int m) {
+    public void setTimeClock(int h, int m) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        my_intent = new Intent(context, AlarmReceiver.class);
 
-        String timeString = h + ":" + m + "|" + _id;
+        String timeString = h + ":" + m;
+
+        Intent my_intent = new Intent(context, AlarmReceiver.class);
         my_intent.putExtra("message", timeString);
-        calendar.setTimeInMillis(System.currentTimeMillis());
+
         calendar.set(Calendar.HOUR_OF_DAY, h);
         calendar.set(Calendar.MINUTE, m);
         calendar.set(calendar.SECOND, 0);
-        calendar.set(calendar.MILLISECOND, 0);
 
-        pendingIntent = PendingIntent.getBroadcast(context, _id, my_intent, PendingIntent.FLAG_ONE_SHOT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(),getAlarmInfoPendingIntent());
+        alarmManager.setAlarmClock(alarmClockInfo, getAlarmActionPendingIntent());
     }
     //Отмена будильника
     public void cancelTimeClock() {
 
         alarmManager.cancel(pendingIntent);
+    }
+    private PendingIntent getAlarmInfoPendingIntent() {
+        Intent alarmInfoIntent = new Intent(context, MainActivity.class);
+        alarmInfoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getBroadcast(context, 0, alarmInfoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    }
+
+    private PendingIntent getAlarmActionPendingIntent() {
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        alarmIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getBroadcast(context, 1, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }

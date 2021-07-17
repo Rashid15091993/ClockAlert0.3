@@ -25,8 +25,8 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="41dp"
         android:layout_marginEnd="12dp"
-        android:checked="false"
-        tools:checked="false" />
+        android:checked="true"
+        tools:checked="true" />
 
 </RelativeLayout>
 

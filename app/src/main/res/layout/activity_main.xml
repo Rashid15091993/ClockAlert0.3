@@ -51,7 +51,7 @@
         android:layout_marginEnd="128dp"
         android:layout_marginRight="128dp"
         android:layout_marginBottom="615dp"
-        android:text="Будильник"
+        android:text="@string/clockalert"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textIsSelectable="false"
         android:textSize="24sp" />
